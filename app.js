@@ -2,8 +2,16 @@ const express = require('express');
 const morgan = require('morgan');
 const override = require('method-override');
 const views = require('./views');
+const { db, initialSync } = require('./models');
 
 const app = express();
+
+db.authenticate().
+then(() => {
+  console.log('connected to the database');
+})
+initialSync();
+
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
 app.use(override('X-HTTP-Method-Override'))
